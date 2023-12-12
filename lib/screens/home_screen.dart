@@ -1,7 +1,5 @@
 import 'package:class_register/screens/add_student.dart';
 import 'package:class_register/screens/list_student.dart';
-import 'package:class_register/screens/personal_details.dart';
-import 'package:class_register/screens/search.dart';
 import 'package:flutter/material.dart';
 
 class Homescreen extends StatelessWidget {
@@ -137,6 +135,3 @@ class Homescreen extends StatelessWidget {
     );
   }
 }
-
-
-

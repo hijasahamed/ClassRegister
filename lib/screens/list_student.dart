@@ -1,3 +1,4 @@
+import 'package:class_register/screens/fuctions.dart';
 import 'package:class_register/screens/personal_details.dart';
 import 'package:class_register/screens/update_student.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -12,10 +13,6 @@ class ListStudent extends StatefulWidget {
 }
 
 class _ListStudentState extends State<ListStudent> {
-
-  final CollectionReference std= FirebaseFirestore.instance.collection('students');
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(        
@@ -25,11 +22,11 @@ class _ListStudentState extends State<ListStudent> {
           padding: const EdgeInsets.all(5),
           child :StreamBuilder(
           stream: std.orderBy('name').snapshots(),  
-          builder: (context,AsyncSnapshot snapshot){
-            if(snapshot.hasData){
+          builder: (context,AsyncSnapshot snapshot){           
+            if(snapshot.hasData && snapshot.data.docs.isNotEmpty){
               return Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: ListView.separated(
+                child: ListView.separated(                 
                   itemBuilder: (ctx,index){
                     final DocumentSnapshot data=snapshot.data.docs[index];
                     return GestureDetector(
@@ -83,7 +80,9 @@ class _ListStudentState extends State<ListStudent> {
                                   icon:const Icon(Icons.edit,color: Colors.green,)
                                 ),
                                 IconButton(
-                                  onPressed: (){}, 
+                                  onPressed: (){
+                                    deletebuttonclicked(data,context);
+                                  }, 
                                   icon:const Icon(Icons.delete,color: Colors.red,)
                                 ),
                               ],
@@ -100,57 +99,11 @@ class _ListStudentState extends State<ListStudent> {
                 ),
               );
             }
-            return const SizedBox(
-              child: Center(
-                child: Text('No Data Available'),
-              ),
-            );
+            return const SizedBox(child: Center(child: Text('No Student Data Availble',style: TextStyle(fontWeight: FontWeight.w600),),),);
           },
         ),
         ),
       ),
     );
   }
-
-
-  // Future<void> deletebuttonclicked(id) async{ 
-  //   showDialog(
-  //     context: context, 
-  //     builder: (ctx){
-  //       return AlertDialog(
-  //         content:const Text('Do You Want To Delete Details?'),
-  //         actions: [
-  //           TextButton(
-  //             onPressed: (){
-                
-  //               Navigator.of(context).pop();
-  //               ScaffoldMessenger.of(context).showSnackBar(
-  //                 const SnackBar(
-  //                   duration: Duration(seconds: 2),
-  //                   behavior: SnackBarBehavior.floating,
-  //                   backgroundColor:  Color.fromARGB(255, 219, 14, 14),
-  //                   margin: EdgeInsets.all(75),
-  //                   content: Text(
-  //                     'Student Details Deleted',
-  //                     textAlign: TextAlign.center,
- 
-  //                   ),
-  //                 ),
-  //               );                
-  //             }, 
-  //             child:const Text('YES'),
-  //           ),
-  //           TextButton(
-  //             onPressed: (){
-  //               Navigator.of(context).pop();
-  //             }, 
-  //             child:const Text('NO')
-  //           )
-  //         ],
-  //       );
-  //     }
-  //   );
-  // }
-
 }
-

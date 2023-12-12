@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:class_register/screens/fuctions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -13,15 +13,6 @@ class UpdateStudent extends StatefulWidget {
 
 class _UpdateStudentState extends State<UpdateStudent> {
 
-  final GlobalKey<FormState> _validation = GlobalKey<FormState>();
-
-  final namecontroller = TextEditingController();
-  final agecontroller = TextEditingController();
-  final addresscontroller = TextEditingController();
-  final mobilecontroller = TextEditingController();
-
-  final CollectionReference std= FirebaseFirestore.instance.collection('students');
-
   @override
   void initState() {
     namecontroller.text=widget.stdDetails['name'];
@@ -29,16 +20,6 @@ class _UpdateStudentState extends State<UpdateStudent> {
     addresscontroller.text=widget.stdDetails['place'];
     mobilecontroller.text=widget.stdDetails['mobile'];
     super.initState();
-  }
-
-  void updateStudent(docid){
-    final data={
-      'name':namecontroller.text,
-      'age':agecontroller.text,
-      'place':addresscontroller.text,
-      'mobile':mobilecontroller.text
-    };
-    std.doc(docid).update(data);
   }
 
   @override
@@ -63,7 +44,7 @@ class _UpdateStudentState extends State<UpdateStudent> {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Form(
-                      key: _validation,
+                      key: validation,
                       child: Column(
                         children: [        
                           Stack(
@@ -177,9 +158,7 @@ class _UpdateStudentState extends State<UpdateStudent> {
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(minimumSize:const Size(360, 45 ),elevation: 10),
                   onPressed: () {
-                    updateStudent(widget.stdDetails.id);
-                    Navigator.pop(context);
-                    print(widget.stdDetails.id);
+                    updateStudent(widget.stdDetails.id,context);                   
                   },                 
                   icon:const  Icon(Icons.check),
                   label:const  Text('Update')
@@ -191,61 +170,4 @@ class _UpdateStudentState extends State<UpdateStudent> {
       )),
     );
   }
-
-
-
-
-
-  // Future<void> fromgallery() async {
-  //   final img1 = await ImagePicker().pickImage(source: ImageSource.gallery);
-  //   if (img1 != null) {
-  //     setState(() {
-  //       image1 = File(img1.path);
-  //       image = image1!.path;
-  //     });
-  //   }
-  // }
-
-  // clearStudentProfilephoto() {
-  //   namecontroller.text = '';
-  //   agecontroller.text = '';
-  //   addresscontroller.text = '';
-  //   mobilecontroller.text = '';
-  //   setState(() {
-  //     image1 = null;
-  //   });
-  // }
-
-  submitbuttondetailsok(){
-    ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          duration: Duration(seconds: 2),
-          behavior: SnackBarBehavior.floating,
-          backgroundColor:  Color.fromARGB(255, 30, 189, 22),
-          margin:  EdgeInsets.all(75),
-          content: Text(
-            'Student Details Submitted',
-            textAlign: TextAlign.center,
-            style:  TextStyle(color: Colors.black),
-          ),
-        ),
-      );
-  }
-
-  submitbuttondetailnotok(){
-    ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          duration: Duration(seconds: 3),
-          behavior: SnackBarBehavior.floating,
-          backgroundColor:  Color.fromARGB(255, 244, 70, 70),
-          margin:  EdgeInsets.all(75),
-          content: Text(
-            'Please Add Student Identity Photo',
-            textAlign: TextAlign.center,
-            style:  TextStyle(color: Colors.black),
-          ),
-        ),
-      );
-  }
-
 }

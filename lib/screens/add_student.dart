@@ -1,6 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:io';
+
+import 'package:class_register/screens/fuctions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
+
+File? image1;
+String? image;
 
 class AddStudent extends StatefulWidget {
  const AddStudent({super.key});
@@ -11,30 +17,20 @@ class AddStudent extends StatefulWidget {
 
 class _AddStudentState extends State<AddStudent> {
 
-  final GlobalKey<FormState> _validation = GlobalKey<FormState>();
+  @override
+  void initState() {
+    clearStudentProfile();
+    super.initState();
+  }
 
-  final namecontroller = TextEditingController();
-  final agecontroller = TextEditingController();
-  final addresscontroller = TextEditingController();
-  final mobilecontroller = TextEditingController();
-
-  final CollectionReference std= FirebaseFirestore.instance.collection('students');
-
-  void addDetails(){
-    final data={
-      'name':namecontroller.text,
-      'age':agecontroller.text,
-      'place':addresscontroller.text,
-      'mobile':mobilecontroller.text,
-     };
-     if(_validation.currentState!.validate()){
-      std.add(data);
-      submitbuttondetailsok();
-      Navigator.pop(context);     
-     }
-     else if(_validation.currentState!.validate()){
-      submitbuttondetailnotok(); 
-    }  
+  clearStudentProfile() {
+    namecontroller.text = '';
+    agecontroller.text = '';
+    addresscontroller.text = '';
+    mobilecontroller.text = '';
+    setState(() {
+      image1 = null;
+    });
   }
 
   @override
@@ -59,16 +55,17 @@ class _AddStudentState extends State<AddStudent> {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Form(
-                      key: _validation,
+                      key: validation,
                       child: Column(
-                        children: [        
+                        children: [ 
+
                           Stack(
                             children: [
-                              const CircleAvatar(
-                                // backgroundImage:image1 != null
-                                // ? FileImage(image1!)
-                                // :  AssetImage('images/circle avatar.png')
-                                // as ImageProvider,
+                               CircleAvatar(
+                                backgroundImage:image1 != null
+                                ? FileImage(image1!)
+                                : const AssetImage('assets/images/circle avatar.png')
+                                as ImageProvider,
                                 radius: 70,
                               ),
                               Positioned(
@@ -79,7 +76,7 @@ class _AddStudentState extends State<AddStudent> {
                                   backgroundColor: Colors.white,
                                   child: IconButton(
                                       onPressed: () {
-                                        // fromgallery();
+                                        fromgallery();
                                       },
                                       icon: const Icon(
                                         Icons.add_a_photo_outlined,
@@ -100,6 +97,7 @@ class _AddStudentState extends State<AddStudent> {
                               }
                             },
                             controller: namecontroller,
+                            inputFormatters: [LengthLimitingTextInputFormatter(25)],
                             decoration: const InputDecoration(
                                 suffixIcon: Icon(Icons.abc),
                                 border: OutlineInputBorder(),
@@ -173,7 +171,7 @@ class _AddStudentState extends State<AddStudent> {
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(minimumSize:const Size(360, 45 ),elevation: 10),
                   onPressed: () {
-                    addDetails();                   
+                    addDetails(context);                   
                   },                 
                   icon:const  Icon(Icons.check),
                   label:const  Text('Submit')
@@ -187,59 +185,15 @@ class _AddStudentState extends State<AddStudent> {
   }
 
 
-
-
-
-  // Future<void> fromgallery() async {
-  //   final img1 = await ImagePicker().pickImage(source: ImageSource.gallery);
-  //   if (img1 != null) {
-  //     setState(() {
-  //       image1 = File(img1.path);
-  //       image = image1!.path;
-  //     });
-  //   }
-  // }
-
-  // clearStudentProfilephoto() {
-  //   namecontroller.text = '';
-  //   agecontroller.text = '';
-  //   addresscontroller.text = '';
-  //   mobilecontroller.text = '';
-  //   setState(() {
-  //     image1 = null;
-  //   });
-  // }
-
-  submitbuttondetailsok(){
-    ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          duration: Duration(seconds: 2),
-          behavior: SnackBarBehavior.floating,
-          backgroundColor:  Color.fromARGB(255, 30, 189, 22),
-          margin:  EdgeInsets.all(75),
-          content: Text(
-            'Student Details Submitted',
-            textAlign: TextAlign.center,
-            style:  TextStyle(color: Colors.black),
-          ),
-        ),
-      );
-  }
-
-  submitbuttondetailnotok(){
-    ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          duration: Duration(seconds: 3),
-          behavior: SnackBarBehavior.floating,
-          backgroundColor:  Color.fromARGB(255, 244, 70, 70),
-          margin:  EdgeInsets.all(75),
-          content: Text(
-            'Please Add Student Identity Photo',
-            textAlign: TextAlign.center,
-            style:  TextStyle(color: Colors.black),
-          ),
-        ),
-      );
+  Future<void> fromgallery() async {
+    final img1 = await ImagePicker().pickImage(source: ImageSource.gallery);
+    print(img1);
+    if (img1 != null) {
+      setState(() {
+        image1 = File(img1.path);
+        image = image1!.path;
+      });
+    }
   }
 
 }

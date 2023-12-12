@@ -1,3 +1,5 @@
+import 'package:class_register/screens/fuctions.dart';
+import 'package:class_register/screens/update_student.dart';
 import 'package:flutter/material.dart';
 
 class Details extends StatefulWidget {  
@@ -10,6 +12,8 @@ class Details extends StatefulWidget {
 }
 
 class _DetailsState extends State<Details> {
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -48,12 +52,23 @@ class _DetailsState extends State<Details> {
                                 ),
                                 Row(
                                   children: [
-                                    IconButton(onPressed: (){
-                                                                  
+                                    IconButton(
+                                      onPressed: (){                                    
+                                        Navigator.pushReplacement(context,
+                                          MaterialPageRoute(
+                                            builder: (ctx) {
+                                              return UpdateStudent(
+                                                stdDetails: widget.details,
+                                              );
+                                            },
+                                          ),
+                                        );                           
                                       }, icon:const Icon(Icons.edit,color: Colors.green,)
                                     ),
                                     IconButton(
-                                      onPressed: (){}, 
+                                      onPressed: ()async {
+                                         await deletebuttonclicked(widget.details,context);                                                                                
+                                      }, 
                                       icon:const Icon(Icons.delete,color: Colors.red,)
                                     )
                                   ],
