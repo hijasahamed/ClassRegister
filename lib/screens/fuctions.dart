@@ -14,6 +14,7 @@ final GlobalKey<FormState> validation = GlobalKey<FormState>();
 
   void addDetails(context){
     final data={
+      'image':imageUrl,
       'name':namecontroller.text,
       'age':agecontroller.text,
       'place':addresscontroller.text,

@@ -47,10 +47,10 @@ class _ListStudentState extends State<ListStudent> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                const SizedBox(
+                                 SizedBox(
                                   child: CircleAvatar(
                                     radius: 30,
-                                    child: Icon(Icons.person)
+                                    backgroundImage: NetworkImage(data['image']), 
                                   ),
                                 ),
                                 SizedBox(

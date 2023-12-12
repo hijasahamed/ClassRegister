@@ -65,12 +65,6 @@ class _DetailsState extends State<Details> {
                                         );                           
                                       }, icon:const Icon(Icons.edit,color: Colors.green,)
                                     ),
-                                    IconButton(
-                                      onPressed: ()async {
-                                         await deletebuttonclicked(widget.details,context);                                                                                
-                                      }, 
-                                      icon:const Icon(Icons.delete,color: Colors.red,)
-                                    )
                                   ],
                                 )
                              ],

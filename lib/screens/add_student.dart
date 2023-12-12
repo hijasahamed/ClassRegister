@@ -1,12 +1,17 @@
 import 'dart:io';
 
 import 'package:class_register/screens/fuctions.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 
 File? image1;
 String? image;
+String? imageUrl;
+Uint8List? imagebyte;
+bool uploading=false; 
 
 class AddStudent extends StatefulWidget {
  const AddStudent({super.key});
@@ -60,14 +65,34 @@ class _AddStudentState extends State<AddStudent> {
                         children: [ 
 
                           Stack(
-                            children: [
-                               CircleAvatar(
-                                backgroundImage:image1 != null
-                                ? FileImage(image1!)
-                                : const AssetImage('assets/images/circle avatar.png')
-                                as ImageProvider,
-                                radius: 70,
-                              ),
+                            children: [image != null
+                              ? uploading
+                                  ? const CircleAvatar(
+                                      radius: 45,
+                                      backgroundColor: Colors.black,
+                                      child: CircularProgressIndicator(
+                                          color:
+                                              Color.fromARGB(255, 240, 187, 30),
+                                          backgroundColor: Colors.transparent),
+                                    )
+                                  : CircleAvatar(
+                                      radius: 45,
+                                      backgroundImage: MemoryImage(imagebyte!))
+                              : const CircleAvatar(
+                                  radius: 45,
+                                  backgroundImage:
+                                      AssetImage('assets/images/circle avatar.png')
+                                          as ImageProvider,
+                                ),
+
+
+                              //  CircleAvatar(
+                              //   backgroundImage:image != null
+                              //   ? MemoryImage(imagebyte!)
+                              //   : const AssetImage('assets/images/circle avatar.png')
+                              //   as ImageProvider,
+                              //   radius: 70,
+                              // ),
                               Positioned(
                                 bottom: 0,
                                 right: 0,
@@ -184,14 +209,43 @@ class _AddStudentState extends State<AddStudent> {
     );
   }
 
-
   Future<void> fromgallery() async {
-    final img1 = await ImagePicker().pickImage(source: ImageSource.gallery);
-    print(img1);
+    FilePickerResult? img1 = await FilePicker.platform.pickFiles();
+
     if (img1 != null) {
       setState(() {
-        image1 = File(img1.path);
-        image = image1!.path;
+        image = img1.files.first.name;
+        imagebyte = img1.files.first.bytes;
+      });
+    }
+
+    try {
+      setState(() {
+        uploading = true;
+      });
+
+      firebase_storage.UploadTask uploadTask;
+      firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
+          .ref()
+          .child('Product')
+          .child('/${image!}');
+      final metadata =
+          firebase_storage.SettableMetadata(contentType: 'image/jpeg');
+      uploadTask = ref.putData(imagebyte!, metadata);
+
+      await uploadTask.whenComplete(() => null);
+
+      imageUrl = await ref.getDownloadURL();
+      print(imageUrl);
+
+      setState(() {
+        uploading = false;
+      });
+    } catch (e) {
+      print(e);
+
+      setState(() {
+        uploading = false;
       });
     }
   }

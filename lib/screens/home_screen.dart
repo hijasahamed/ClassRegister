@@ -1,5 +1,6 @@
 import 'package:class_register/screens/add_student.dart';
 import 'package:class_register/screens/list_student.dart';
+import 'package:class_register/screens/search.dart';
 import 'package:flutter/material.dart';
 
 class Homescreen extends StatelessWidget {
@@ -71,7 +72,7 @@ class Homescreen extends StatelessWidget {
             ),
             const Text('STUDENT REGISTER', style: TextStyle(fontWeight: FontWeight.w900,color: Colors.white),),
             IconButton(onPressed: () {
-              // showSearch(context: context, delegate: Search()); 
+              showSearch(context: context, delegate: Search()); 
              }, icon:const  Icon(Icons.search,color: Colors.white,)
             ),
           ],
@@ -92,11 +93,7 @@ class Homescreen extends StatelessWidget {
                 decoration:const BoxDecoration(
                   color: Colors.black38,
                   borderRadius: BorderRadius.all(Radius.circular(10)),
-                  image: DecorationImage(image: AssetImage('assets/images/class.png'),fit: BoxFit.fill)
-                ),
-                child: Transform.translate(
-                  offset: Offset(95,100),
-                  child:const Text('IX STANDERED',style: TextStyle(fontSize: 30,color: Colors.white),)
+                  image: DecorationImage(image: AssetImage('assets/images/class board.png'),fit: BoxFit.fill)
                 ),
               ),
             ),
