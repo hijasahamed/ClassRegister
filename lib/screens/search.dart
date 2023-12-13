@@ -4,9 +4,6 @@ import 'package:flutter/material.dart';
 
 class Search extends SearchDelegate {
 
-  // List data = [];
-  // final CollectionReference std= FirebaseFirestore.instance.collection('students');
-
   @override
   List<Widget>? buildActions(BuildContext context) {
     return [
@@ -45,7 +42,7 @@ class Search extends SearchDelegate {
             return const  Column(
               mainAxisAlignment: MainAxisAlignment.center ,
             children: [
-              Center(child: Text('Sorry Searched Result Not Found',style: TextStyle(fontWeight: FontWeight.w500),)),
+              Center(child: Text('No Searching Matches Found',style: TextStyle(fontWeight: FontWeight.w500),)),
             ],
             );  
           }
@@ -62,9 +59,9 @@ class Search extends SearchDelegate {
                             builder: (ctx) => Details(details: data) 
                           ));
                         },
-                        leading:const CircleAvatar(
+                        leading: CircleAvatar(
                           radius: 80,
-                          child: Icon(Icons.person),
+                          backgroundImage: NetworkImage(data['image']),
                         ),
                         title: Text(
                           data['name'],
@@ -80,7 +77,7 @@ class Search extends SearchDelegate {
                 else {
                   return const SizedBox();
                 }
-              },
+              },              
               itemCount: filteredData.length,
             );
         }
@@ -126,9 +123,9 @@ class Search extends SearchDelegate {
                             builder: (ctx) => Details(details: data) 
                           ));
                         },
-                        leading:const CircleAvatar(
+                        leading: CircleAvatar(
                           radius: 80,
-                          child: Icon(Icons.person),
+                          backgroundImage: NetworkImage(data['image']),
                         ),
                         title: Text(
                           data['name'],

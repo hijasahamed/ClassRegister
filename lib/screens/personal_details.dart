@@ -1,4 +1,3 @@
-import 'package:class_register/screens/fuctions.dart';
 import 'package:class_register/screens/update_student.dart';
 import 'package:flutter/material.dart';
 
@@ -46,9 +45,9 @@ class _DetailsState extends State<Details> {
                            child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                              children: [
-                                const CircleAvatar(
+                                 CircleAvatar(
                                   radius: 80,
-                                   child: Icon(Icons.person,size: 100,),
+                                  backgroundImage: NetworkImage(widget.details['image']),
                                 ),
                                 Row(
                                   children: [

@@ -1,4 +1,7 @@
+import 'package:class_register/screens/add_student.dart';
 import 'package:class_register/screens/fuctions.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -39,7 +42,7 @@ class _UpdateStudentState extends State<UpdateStudent> {
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: Color.fromARGB(255, 248, 247, 247),                     
+                  color:const Color.fromARGB(255, 248, 247, 247),                     
                 ), 
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -49,12 +52,23 @@ class _UpdateStudentState extends State<UpdateStudent> {
                         children: [        
                           Stack(
                             children: [
-                              const CircleAvatar(
-                                // backgroundImage:image1 != null
-                                // ? FileImage(image1!)
-                                // :  AssetImage('images/circle avatar.png')
-                                // as ImageProvider,
-                                radius: 70,
+                              image != null
+                              ? uploading
+                                  ? const CircleAvatar(
+                                      radius: 70,
+                                      backgroundColor: Colors.black,
+                                      child: CircularProgressIndicator(
+                                          color:Colors.deepPurpleAccent,
+                                          backgroundColor: Colors.transparent),
+                                    )
+                                  : CircleAvatar(
+                                      radius: 70,
+                                      backgroundImage: MemoryImage(imagebyte!))
+                              : const CircleAvatar(
+                                  radius: 70,
+                                  backgroundImage:
+                                      AssetImage('assets/images/circle avatar.png')
+                                          as ImageProvider,
                               ),
                               Positioned(
                                 bottom: 0,
@@ -64,7 +78,7 @@ class _UpdateStudentState extends State<UpdateStudent> {
                                   backgroundColor: Colors.white,
                                   child: IconButton(
                                       onPressed: () {
-                                        // fromgallery();
+                                        fromgallery();
                                       },
                                       icon: const Icon(
                                         Icons.add_a_photo_outlined,
@@ -75,8 +89,6 @@ class _UpdateStudentState extends State<UpdateStudent> {
                               )
                             ],
                           ),
-                          
-                          
                           const SizedBox(height: 25),
                           TextFormField(
                             validator: (value) {
@@ -170,4 +182,46 @@ class _UpdateStudentState extends State<UpdateStudent> {
       )),
     );
   }
+
+  Future<void> fromgallery() async {
+    FilePickerResult? img1 = await FilePicker.platform.pickFiles();
+
+    if (img1 != null) {
+      setState(() {
+        image = img1.files.first.name;
+        imagebyte = img1.files.first.bytes;
+      });
+    }
+
+    try {
+      setState(() {
+        uploading = true;
+      });
+
+      firebase_storage.UploadTask uploadTask;
+      firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
+          .ref()
+          .child('Product')
+          .child('/${image!}');
+      final metadata =
+          firebase_storage.SettableMetadata(contentType: 'image/jpeg');
+      uploadTask = ref.putData(imagebyte!, metadata);
+
+      await uploadTask.whenComplete(() => null);
+
+      imageUrl = await ref.getDownloadURL();
+
+      setState(() {
+        uploading = false;
+      });
+    } catch (e) {
+      print(e);
+
+      setState(() {
+        uploading = false;
+      });
+    }
+  }
+
+
 }

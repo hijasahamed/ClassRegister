@@ -5,7 +5,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:image_picker/image_picker.dart';
 
 File? image1;
 String? image;
@@ -55,7 +54,7 @@ class _AddStudentState extends State<AddStudent> {
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: Color.fromARGB(255, 248, 247, 247),                     
+                  color:const Color.fromARGB(255, 248, 247, 247),                     
                 ), 
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -63,36 +62,26 @@ class _AddStudentState extends State<AddStudent> {
                       key: validation,
                       child: Column(
                         children: [ 
-
                           Stack(
-                            children: [image != null
+                            children: [
+                              image != null
                               ? uploading
                                   ? const CircleAvatar(
-                                      radius: 45,
+                                      radius: 70,
                                       backgroundColor: Colors.black,
                                       child: CircularProgressIndicator(
-                                          color:
-                                              Color.fromARGB(255, 240, 187, 30),
+                                          color:Colors.deepPurpleAccent,
                                           backgroundColor: Colors.transparent),
                                     )
                                   : CircleAvatar(
-                                      radius: 45,
+                                      radius: 70,
                                       backgroundImage: MemoryImage(imagebyte!))
                               : const CircleAvatar(
-                                  radius: 45,
+                                  radius: 70,
                                   backgroundImage:
                                       AssetImage('assets/images/circle avatar.png')
                                           as ImageProvider,
-                                ),
-
-
-                              //  CircleAvatar(
-                              //   backgroundImage:image != null
-                              //   ? MemoryImage(imagebyte!)
-                              //   : const AssetImage('assets/images/circle avatar.png')
-                              //   as ImageProvider,
-                              //   radius: 70,
-                              // ),
+                              ),
                               Positioned(
                                 bottom: 0,
                                 right: 0,
@@ -236,7 +225,6 @@ class _AddStudentState extends State<AddStudent> {
       await uploadTask.whenComplete(() => null);
 
       imageUrl = await ref.getDownloadURL();
-      print(imageUrl);
 
       setState(() {
         uploading = false;

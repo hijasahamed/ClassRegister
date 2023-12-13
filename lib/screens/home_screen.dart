@@ -78,9 +78,6 @@ class Homescreen extends StatelessWidget {
           ],
         ),
       ),
-
-
-      
       body: Column( 
         children: [
           Flexible(
@@ -108,25 +105,25 @@ class Homescreen extends StatelessWidget {
             ),
           ),
           Flexible(
-              flex: 2,
-              child: SizedBox( 
-                child: Center(
-                  child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context)
-                            .push(MaterialPageRoute(builder: (ctx) {
-                          return const AddStudent();
-                        }));
-                      },                      
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color.fromARGB(255, 11, 11, 11),
-                        minimumSize:const Size(200,60 )
-                      ),
-                      child:const Text('Add Student',style: TextStyle(color: Colors.white,fontSize: 19,fontWeight: FontWeight.w600,letterSpacing: 1),),
+            flex: 2,
+            child: SizedBox( 
+              child: Center(
+                child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (ctx) {
+                        return const AddStudent();
+                      }));
+                    },                      
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(255, 11, 11, 11),
+                      minimumSize:const Size(200,60 )
                     ),
-                ),
-              )
-            ),
+                    child:const Text('Add Student',style: TextStyle(color: Colors.white,fontSize: 19,fontWeight: FontWeight.w600,letterSpacing: 1),),
+                  ),
+              ),
+            )
+          ),
         ],
       ),
     );
