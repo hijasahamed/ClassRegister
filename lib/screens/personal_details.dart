@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:class_register/screens/update_student.dart';
 import 'package:flutter/material.dart';
 
@@ -45,9 +46,33 @@ class _DetailsState extends State<Details> {
                            child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                              children: [
-                                 CircleAvatar(
-                                  radius: 80,
-                                  backgroundImage: NetworkImage(widget.details['image']),
+                                widget.details['image'] != null 
+                                ? CircleAvatar(
+                                    radius: 60,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(60),
+                                      child: CachedNetworkImage( 
+                                        imageUrl: widget.details['image'],                                      
+                                        fit: BoxFit.cover,
+                                        height: 120,
+                                        width: 120,
+                                        placeholder: (context, url) => const Padding(
+                                          padding: EdgeInsets.all(5),
+                                          child: CircularProgressIndicator(
+                                              color: Colors.deepPurpleAccent,
+                                              backgroundColor: Colors.transparent),
+                                        ),
+                                        errorWidget: (context, url, error) => const Icon(
+                                          Icons.error,
+                                          color: Colors.red,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                : const CircleAvatar(
+                                    radius: 60,
+                                    backgroundColor: Colors.black,
+                                    backgroundImage: AssetImage('assets/images/circle avatar.png'),
                                 ),
                                 Row(
                                   children: [

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:class_register/screens/add_student.dart';
 import 'package:class_register/screens/fuctions.dart';
 import 'package:file_picker/file_picker.dart';
@@ -22,6 +23,10 @@ class _UpdateStudentState extends State<UpdateStudent> {
     agecontroller.text=widget.stdDetails['age'];
     addresscontroller.text=widget.stdDetails['place'];
     mobilecontroller.text=widget.stdDetails['mobile'];
+    imageUrl=null;
+    setState(() {
+      image=null;
+    });
     super.initState();
   }
 
@@ -52,24 +57,41 @@ class _UpdateStudentState extends State<UpdateStudent> {
                         children: [        
                           Stack(
                             children: [
-                              image != null
-                              ? uploading
-                                  ? const CircleAvatar(
-                                      radius: 70,
-                                      backgroundColor: Colors.black,
-                                      child: CircularProgressIndicator(
-                                          color:Colors.deepPurpleAccent,
-                                          backgroundColor: Colors.transparent),
-                                    )
-                                  : CircleAvatar(
-                                      radius: 70,
-                                      backgroundImage: MemoryImage(imagebyte!))
-                              : const CircleAvatar(
-                                  radius: 70,
-                                  backgroundImage:
-                                      AssetImage('assets/images/circle avatar.png')
-                                          as ImageProvider,
+                              image == null
+                        ? CircleAvatar(
+                            radius: 40,
+                            child: ClipOval(
+                              clipBehavior: Clip.antiAlias,
+                              child: CachedNetworkImage(
+                                imageUrl: widget.stdDetails['image'],
+                                width: 100,
+                                height: 100,
+                                fit: BoxFit.cover,
+                                placeholder: (context, url) => const Padding(
+                                  padding: EdgeInsets.all(5),
+                                  child: CircularProgressIndicator(
+                                      color: Color.fromARGB(255, 240, 187, 30),
+                                      backgroundColor: Colors.transparent),
+                                ),
+                                errorWidget: (context, url, error) =>
+                                    const Icon(
+                                  Icons.error,
+                                  color: Colors.red,
+                                ),
                               ),
+                            ),
+                          )
+                        : uploading
+                            ? const CircleAvatar(
+                                radius: 40,
+                                backgroundColor: Colors.black,
+                                child: CircularProgressIndicator(
+                                    color: Color.fromARGB(255, 240, 187, 30),
+                                    backgroundColor: Colors.transparent),
+                              )
+                            : CircleAvatar(
+                                radius: 40,
+                                backgroundImage: MemoryImage(imagebyte!)),
                               Positioned(
                                 bottom: 0,
                                 right: 0,
@@ -170,7 +192,14 @@ class _UpdateStudentState extends State<UpdateStudent> {
               ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(minimumSize:const Size(360, 45 ),elevation: 10),
                   onPressed: () {
-                    updateStudent(widget.stdDetails.id,context);                   
+                    if(widget.stdDetails['name']==namecontroller.text&&widget.stdDetails['age']==agecontroller.text
+                    &&widget.stdDetails['place']==addresscontroller.text&&widget.stdDetails['mobile']==mobilecontroller.text
+                    &&widget.stdDetails['image']!=null&&imageUrl==null){
+                      updatebuttonnotEdited(context);
+                    }
+                    else{ 
+                    updateStudent(widget.stdDetails.id,context,widget.stdDetails['image']);                    
+                    }
                   },                 
                   icon:const  Icon(Icons.check),
                   label:const  Text('Update')

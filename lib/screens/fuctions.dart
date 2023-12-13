@@ -21,7 +21,25 @@ final GlobalKey<FormState> validation = GlobalKey<FormState>();
       'mobile':mobilecontroller.text,
      };
      if(validation.currentState!.validate()){
+      if(uploading==false){
       std.add(data).then((value) => Navigator.pop(context)).then((value) => submitbuttondetailsok(context));   
+      }else{
+         ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          duration: Duration(seconds: 2),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor:  Color.fromARGB(255, 240, 243, 240),
+          margin:  EdgeInsets.all(75),
+          content: Text(
+            'Photo Processing....Please Wait',
+            textAlign: TextAlign.center,
+            style:  TextStyle(color: Colors.black),
+          ),
+        ),
+      );
+      }
+      imageUrl=null;
+
      }
      else if(validation.currentState!.validate()){
       submitbuttondetailnotok(context); 
@@ -103,8 +121,9 @@ final GlobalKey<FormState> validation = GlobalKey<FormState>();
     );
   }
 
-  void updateStudent(docid,context){
+  void updateStudent(docid,context,nullimg){
     final data={
+      'image':imageUrl ??nullimg,
       'name':namecontroller.text,
       'age':agecontroller.text,
       'place':addresscontroller.text,
@@ -127,4 +146,20 @@ final GlobalKey<FormState> validation = GlobalKey<FormState>();
           ),
         ),
       );
+  }
+
+  updatebuttonnotEdited(context){
+    ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          duration: Duration(seconds: 2),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor:  Color.fromARGB(255, 119, 116, 116),
+          margin:  EdgeInsets.all(75),
+          content: Text(
+            'Edit Data',
+            textAlign: TextAlign.center,
+            style:  TextStyle(color: Colors.black),
+          ),
+        ),
+    );
   }

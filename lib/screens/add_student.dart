@@ -6,7 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-File? image1;
+
 String? image;
 String? imageUrl;
 Uint8List? imagebyte;
@@ -23,19 +23,24 @@ class _AddStudentState extends State<AddStudent> {
 
   @override
   void initState() {
-    clearStudentProfile();
+    clearStudentProfile(); 
+    setState(() {
+      image=null;
+    });
     super.initState();
   }
+
+  
+  
 
   clearStudentProfile() {
     namecontroller.text = '';
     agecontroller.text = '';
     addresscontroller.text = '';
     mobilecontroller.text = '';
-    setState(() {
-      image1 = null;
-    });
   }
+
+
 
   @override
   Widget build(BuildContext context) {

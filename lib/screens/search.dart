@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:class_register/screens/fuctions.dart';
 import 'package:class_register/screens/personal_details.dart';
 import 'package:flutter/material.dart';
@@ -59,9 +60,34 @@ class Search extends SearchDelegate {
                             builder: (ctx) => Details(details: data) 
                           ));
                         },
-                        leading: CircleAvatar(
-                          radius: 80,
-                          backgroundImage: NetworkImage(data['image']),
+                        leading: 
+                        data['image'] != null 
+                        ? CircleAvatar(
+                            radius: 30,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(30),
+                              child: CachedNetworkImage( 
+                                imageUrl: data['image'],                                      
+                                fit: BoxFit.cover,
+                                height: 50,
+                                width: 50,
+                                placeholder: (context, url) => const Padding(
+                                  padding: EdgeInsets.all(5),
+                                  child: CircularProgressIndicator(
+                                      color: Colors.deepPurpleAccent,
+                                      backgroundColor: Colors.transparent),
+                                ),
+                                errorWidget: (context, url, error) => const Icon(
+                                  Icons.error,
+                                  color: Colors.red,
+                                ),
+                              ),
+                            ),
+                          )
+                        : const CircleAvatar(
+                            radius: 30,
+                            backgroundColor: Colors.black,
+                            backgroundImage: AssetImage('assets/images/circle avatar.png'),
                         ),
                         title: Text(
                           data['name'],
@@ -123,9 +149,34 @@ class Search extends SearchDelegate {
                             builder: (ctx) => Details(details: data) 
                           ));
                         },
-                        leading: CircleAvatar(
-                          radius: 80,
-                          backgroundImage: NetworkImage(data['image']),
+                        leading: 
+                        data['image'] != null 
+                        ? CircleAvatar(
+                            radius: 30,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(30),
+                              child: CachedNetworkImage( 
+                                imageUrl: data['image'],                                      
+                                fit: BoxFit.cover,
+                                height: 50,
+                                width: 50,
+                                placeholder: (context, url) => const Padding(
+                                  padding: EdgeInsets.all(5),
+                                  child: CircularProgressIndicator(
+                                      color: Colors.deepPurpleAccent,
+                                      backgroundColor: Colors.transparent),
+                                ),
+                                errorWidget: (context, url, error) => const Icon(
+                                  Icons.error,
+                                  color: Colors.red,
+                                ),
+                              ),
+                            ),
+                          )
+                        : const CircleAvatar(
+                            radius: 30,
+                            backgroundColor: Colors.black,
+                            backgroundImage: AssetImage('assets/images/circle avatar.png'),
                         ),
                         title: Text(
                           data['name'],

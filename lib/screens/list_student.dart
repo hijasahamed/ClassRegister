@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:class_register/screens/fuctions.dart';
 import 'package:class_register/screens/personal_details.dart';
 import 'package:class_register/screens/update_student.dart';
@@ -47,11 +48,39 @@ class _ListStudentState extends State<ListStudent> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                 SizedBox(
-                                  child: CircleAvatar(
+                                //  SizedBox(
+                                //   child: CircleAvatar(
+                                //     radius: 30,
+                                //     backgroundImage: NetworkImage(data['image']), 
+                                //   ),                                  
+                                // ),
+                                data['image'] != null 
+                                ? CircleAvatar(
                                     radius: 30,
-                                    backgroundImage: NetworkImage(data['image']), 
-                                  ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(30),
+                                      child: CachedNetworkImage( 
+                                        imageUrl: data['image'],                                      
+                                        fit: BoxFit.cover,
+                                        height: 60,
+                                        width: 60,
+                                        placeholder: (context, url) => const Padding(
+                                          padding: EdgeInsets.all(5),
+                                          child: CircularProgressIndicator(
+                                              color: Colors.deepPurpleAccent,
+                                              backgroundColor: Colors.transparent),
+                                        ),
+                                        errorWidget: (context, url, error) => const Icon(
+                                          Icons.error,
+                                          color: Colors.red,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                : const CircleAvatar(
+                                    radius: 30,
+                                    backgroundColor: Colors.black,
+                                    backgroundImage: AssetImage('assets/images/circle avatar.png'),
                                 ),
                                 SizedBox(
                                   height: double.infinity,
