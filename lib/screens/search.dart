@@ -29,7 +29,10 @@ class Search extends SearchDelegate {
   Widget buildSuggestions(BuildContext context) {
     return StreamBuilder(
       stream: std.snapshots(), 
-      builder: (context,AsyncSnapshot snapshot){       
+      builder: (context,AsyncSnapshot snapshot){
+        if(query.isEmpty){
+          return const Center(child: Text('Search for Students',style: TextStyle(fontWeight: FontWeight.w700),));
+        }       
         if(snapshot.hasData && snapshot.data.docs.isNotEmpty){
           List  stdbox=snapshot.data.docs.toList();
           final filteredData =stdbox
